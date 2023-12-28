@@ -12,6 +12,23 @@ def convert_dataset_json(path_file,dest_path):
     with open(dest_path,'w') as f:
         json.dump(final_data,f,indent=4)
 
+def read_quality_dataset(path_file):
+    file=open(path_file,'r')
+    quality_data=json.load(file)
+    file.close()
+    final_data=[]
+    for data in quality_data:
+        article=data["article"]
+        questions=data["questions"]
+        for q in questions:
+            q.pop("question_unique_id")
+            q.pop("writer_label")
+            q.pop("validation")
+            q.pop("speed_validation")
+
+        final_data.append({"passage":article,"questions":questions})
+    return final_data
+
 if __name__=="__main__":
     parser = argparse.ArgumentParser(
                     prog='conversion_to_json',
